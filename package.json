@@ -1,0 +1,47 @@
+{
+  "name": "vue-todo-app",
+  "author": "conrad",
+  "version": "1.0.0",
+  "description": "Vue Todo App",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com"
+  },
+  "keywords": [
+    "vue"
+  ],
+  "scripts": {
+    "start": "webpack-dev-server --mode development",
+    "build": "webpack --mode production"
+  },
+  "browserslist": [
+    "last 2 versions",
+    "ie >= 10"
+  ],
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/polyfill": "^7.12.1",
+    "autoprefixer": "^9.6.5",
+    "postcss-loader": "^3.0.0",
+    "vue": "^2.6.12"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.3",
+    "@babel/preset-env": "^7.12.1",
+    "babel-loader": "^8.2.1",
+    "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^5.1.2",
+    "css-loader": "3.2",
+    "html-webpack-plugin": "^4.5.0",
+    "node-sass": "4.13",
+    "sass-loader": "^7.3.1",
+    "vue-loader": "^15.9.4",
+    "vue-style-loader": "^4.1.2",
+    "vue-template-compiler": "^2.6.12",
+    "webpack": "4",
+    "webpack-cli": "3.3.9",
+    "webpack-dev-server": "3.8.2",
+    "webpack-merge": "^5.4.0"
+  }
+}
