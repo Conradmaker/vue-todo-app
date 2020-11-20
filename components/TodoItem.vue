@@ -1,11 +1,11 @@
 <template>
-    <div class="todo-item">
+    <div :class='{done}' class="todo-item">
 
         <div v-if='isEditMode' class="item__inner item--edit">
-            <input :value='editedTitle' type="text" @input="editedTitle=$event.target.value" @keypress.enter="editedTodo" @keypress.esc="offEditMode">
+            <input ref='titleInput' :value='editedTitle' type="text" @input="editedTitle=$event.target.value" @keypress.enter="editedTodo" @keypress.esc="offEditMode">
             <div class="item__actions">
-                <button @click='editedTodo'>완료</button>
-                <button @click='offEditMode'>취소</button>
+                <button key='finish' @click='editedTodo'>완료</button>
+                <button key='cancel' @click='offEditMode'>취소</button>
             </div>
         </div>
         <div v-else class="item__inner item--normal">
@@ -19,8 +19,8 @@
                 </div>
             </div>
             <div class='item__actions'>
-                <button @click="onEditMode">수정</button>
-                <button @click="deleteTodo">삭제</button>
+                <button key='update' @click="onEditMode">수정</button>
+                <button key='delete' @click="deleteTodo">삭제</button>
             </div>
         </div>
     </div>
@@ -57,11 +57,22 @@ export default {
   },
   methods: {
     editedTodo () {
+      if (this.todo.title !== this.editedTitle) {
+        this.updateTodo({
+          title: this.editedTitle,
+          updatedAt: new Date()
+        })
+      }
 
+      this.offEditMode()
     },
     onEditMode () {
       this.isEditMode = true
       this.editedTitle = this.todo.title
+
+      this.$nextTick(() => {
+        this.$refs.titleInput.focus()
+      })
     },
     offEditMode () {
       this.isEditMode = false
@@ -75,3 +86,19 @@ export default {
   }
 }
 </script>
+<style scoped lang='scss'>
+    .todo-item{
+        margin-bottom: 10px;
+        .item__inner{
+            display:flex;
+        }
+        .item__date{
+            font-size: 12px;
+        }
+        &.done{
+            .item__title{
+                text-decoration: line-through;
+            }
+        }
+    }
+</style>

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <todo-item v-for='todo in todos' :key='todo.id' :todo='todo' @update-todo='updateTodo' @deleteTodo='deleteTodo' />
+        <todo-item v-for='todo in todos' :key='todo.id' :todo='todo' @update-todo='updateTodo' @delete-todo='deleteTodo' />
         <hr>
         <todo-creator @create-todo="createTodo"/>
     </div>
@@ -9,6 +9,9 @@
 import lowdb from 'lowdb'
 import LocalStorage from 'lowdb/adapters/LocalStorage'
 import _cloneDeep from 'lodash/cloneDeep'
+import _find from 'lodash/find'
+import _assign from 'lodash/assign'
+import _findIndex from 'lodash/findIndex'
 import cryptoRandomString from 'crypto-random-string'
 import TodoCreator from './TodoCreator'
 import TodoItem from './TodoItem'
@@ -51,16 +54,36 @@ export default {
         updatedAt: new Date(),
         done: false
       }
+
+      // create DB
       this.db
         .get('todos') // lodash todos라는 저장소를 불러와서
         .push(newTodo) // lodash newTodo객체를 넣어준다.
         .write() // lowdb db에 기록
+
+      // create Client
+      this.todos.push(newTodo)
     },
-    updateTodo () {
-      console.log('update')
+    updateTodo (todo, value) {
+      this.db
+        .get('todos')
+        .find({ id: todo.id })
+        .assign(value)
+        .write()
+
+      // create Client
+      const foundTodo = _find(this.todos, { id: todo.id })
+      _assign(foundTodo, value)
     },
-    deleteTodo () {
-      console.log('delete')
+    deleteTodo (todo) {
+      this.db
+        .get('todos')
+        .remove({ id: todo.id })
+        .write()
+
+      // _remove(this.todos, { id: todo.id }) 실제로 지워지긴하지만 mutable해서 안된디ㅏ.
+      const foundIndex = _findIndex(this.todos, { id: todo.id })
+      this.$delete(this.todos, foundIndex) // (1번인자의 2번인자인덱스값을 지운다.)
     }
   }
 }
