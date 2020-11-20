@@ -25,6 +25,8 @@
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
     "autoprefixer": "^9.6.5",
+    "crypto-random-string": "^3.3.0",
+    "dayjs": "^1.9.6",
     "lodash": "^4.17.20",
     "lowdb": "^1.0.0",
     "postcss-loader": "^3.0.0",
