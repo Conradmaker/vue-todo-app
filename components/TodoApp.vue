@@ -1,8 +1,17 @@
 <template>
-    <div>
-        <todo-item v-for='todo in todos' :key='todo.id' :todo='todo' @update-todo='updateTodo' @delete-todo='deleteTodo' />
+    <div class='todo-app'>
+      <div class="todo-app__actions">
+        <div class="filters">
+          <button :class='{active:filter==="all"}' @click='changeFilter("all")'>모든 항목 ({{total}})</button>
+          <button :class='{active:filter==="active"}' @click='changeFilter("active")'>해야 할 항목 ({{activeCount}})</button>
+          <button :class='{active:filter==="completed"}' @click='changeFilter("completed")'>완료된 항목 ({{completedCount}})</button>
+        </div>
+      </div>
+      <div class="todo-app__list">
+        <todo-item v-for='todo in filterdTodos' :key='todo.id' :todo='todo' @update-todo='updateTodo' @delete-todo='deleteTodo' />
+      </div>
         <hr>
-        <todo-creator @create-todo="createTodo"/>
+        <todo-creator class='todo-app__creator' @create-todo="createTodo"/>
     </div>
 </template>
 <script>
@@ -24,7 +33,30 @@ export default {
   data () {
     return {
       db: null,
-      todos: []
+      todos: [],
+      filter: 'all'
+    }
+  },
+  computed: {
+    filterdTodos () {
+      switch (this.filter) {
+        case 'all':
+        default:
+          return this.todos
+        case 'active': // 해야할 항목
+          return this.todos.filter(v => !v.done)
+        case 'completed': // 완료된 항목
+          return this.todos.filter(v => v.done)
+      }
+    },
+    total () {
+      return this.todos.length
+    },
+    activeCount () {
+      return this.todos.filter(v => !v.done).length
+    },
+    completedCount () {
+      return this.total - this.activeCount
     }
   },
   created () {
@@ -84,7 +116,15 @@ export default {
       // _remove(this.todos, { id: todo.id }) 실제로 지워지긴하지만 mutable해서 안된디ㅏ.
       const foundIndex = _findIndex(this.todos, { id: todo.id })
       this.$delete(this.todos, foundIndex) // (1번인자의 2번인자인덱스값을 지운다.)
+    },
+    changeFilter (filter) {
+      this.filter = filter
     }
   }
 }
 </script>
+<style lang="scss" scoped>
+button.active{
+  font-weight: bold;
+}
+</style>
