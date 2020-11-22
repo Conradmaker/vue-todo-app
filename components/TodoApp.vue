@@ -6,6 +6,10 @@
           <button :class='{active:filter==="active"}' @click='changeFilter("active")'>해야 할 항목 ({{activeCount}})</button>
           <button :class='{active:filter==="completed"}' @click='changeFilter("completed")'>완료된 항목 ({{completedCount}})</button>
         </div>
+        <div class="actions">
+          <input v-model='allDone' type="checkbox">
+          <button>완료된 항목 삭제</button>
+        </div>
       </div>
       <div class="todo-app__list">
         <todo-item v-for='todo in filterdTodos' :key='todo.id' :todo='todo' @update-todo='updateTodo' @delete-todo='deleteTodo' />
@@ -57,6 +61,14 @@ export default {
     },
     completedCount () {
       return this.total - this.activeCount
+    },
+    allDone: {
+      get () {
+        return this.total === this.completedCount && this.total > 0
+      },
+      set (checked) {
+        this.completeAll(checked)
+      }
     }
   },
   created () {
@@ -119,6 +131,17 @@ export default {
     },
     changeFilter (filter) {
       this.filter = filter
+    },
+    completeAll (checked) {
+      // DB갱신
+      const newTodos = this.db
+        .get('todos')
+        .forEach(v => {
+          v.done = checked
+        })
+        .write()
+      // LOCAL갱신
+      this.todos = _cloneDeep(newTodos)
     }
   }
 }
