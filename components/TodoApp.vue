@@ -8,7 +8,7 @@
         </div>
         <div class="actions">
           <input v-model='allDone' type="checkbox">
-          <button>완료된 항목 삭제</button>
+          <button @click='clearCompleted'>완료된 항목 삭제</button>
         </div>
       </div>
       <div class="todo-app__list">
@@ -25,6 +25,7 @@ import _cloneDeep from 'lodash/cloneDeep'
 import _find from 'lodash/find'
 import _assign from 'lodash/assign'
 import _findIndex from 'lodash/findIndex'
+import _forEachRight from 'lodash/forEachRight'
 import cryptoRandomString from 'crypto-random-string'
 import TodoCreator from './TodoCreator'
 import TodoItem from './TodoItem'
@@ -142,6 +143,27 @@ export default {
         .write()
       // LOCAL갱신
       this.todos = _cloneDeep(newTodos)
+    },
+    clearCompleted () {
+      // 네이티브 로직
+      // this.todos.reduce((list, todo, index) => {
+      //   if (todo.done) {
+      //     list.push(index)
+      //   }
+      //   return list
+      // }, [])
+      //   .reverse()
+      //   .forEach(v => {
+      //     this.deleteTodo(this.todos[v])
+      //   })
+
+      // lodash
+      // _forEachRight(this.todos, v => {
+      //   if (v.done) {
+      //     this.deleteTodo(v)
+      //   }
+      // })
+      this.todos = this.todos.filter(v => v.done === false)
     }
   }
 }
