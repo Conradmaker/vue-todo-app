@@ -4,12 +4,12 @@
         <div v-if='isEditMode' class="item__inner item--edit">
             <input ref='titleInput' :value='editedTitle' type="text" @input="editedTitle=$event.target.value" @keypress.enter="editedTodo" @keypress.esc="offEditMode">
             <div class="item__actions">
-                <button key='finish' @click='editedTodo'>완료</button>
-                <button key='cancel' @click='offEditMode'>취소</button>
+                <button class='btn btn--primary' key='finish' @click='editedTodo'><i class='material-icons'>done</i></button>
+                <button class='btn' key='cancel' @click='offEditMode'><i class='material-icons'>clear</i></button>
             </div>
         </div>
         <div v-else class="item__inner item--normal">
-            <input type="checkbox" v-model="done">
+            <label><input type="checkbox" v-model="done"> <span class='icon'><i class="material-icons">check</i></span></label>
             <div class='item__title-wrap'>
                 <div class="item__title">
                     {{todo.title}}
@@ -19,8 +19,8 @@
                 </div>
             </div>
             <div class='item__actions'>
-                <button key='update' @click="onEditMode">수정</button>
-                <button key='delete' @click="deleteTodo">삭제</button>
+                <button class='btn' key='update' @click="onEditMode"> <i class='material-icons'>edit</i></button>
+                <button class='btn btn--danger' key='delete' @click="deleteTodo"><i class='material-icons'>delete</i></button>
             </div>
         </div>
     </div>
@@ -87,18 +87,5 @@ export default {
 }
 </script>
 <style scoped lang='scss'>
-    .todo-item{
-        margin-bottom: 10px;
-        .item__inner{
-            display:flex;
-        }
-        .item__date{
-            font-size: 12px;
-        }
-        &.done{
-            .item__title{
-                text-decoration: line-through;
-            }
-        }
-    }
+
 </style>

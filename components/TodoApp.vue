@@ -6,15 +6,24 @@
           <button :class='{active:filter==="active"}' @click='changeFilter("active")'>해야 할 항목 ({{activeCount}})</button>
           <button :class='{active:filter==="completed"}' @click='changeFilter("completed")'>완료된 항목 ({{completedCount}})</button>
         </div>
-        <div class="actions">
-          <input v-model='allDone' type="checkbox">
-          <button @click='clearCompleted'>완료된 항목 삭제</button>
+        <div class="actions clearfix">
+          <div class="float--left">
+            <label><input v-model='allDone' type="checkbox"><span class='icon'><i class="material-icons">done_all</i></span></label>
+          </div>
+          <div class="float--right clearfix">
+            <button class='btn float--left' @click='scrollToTop'>
+              <i class="material-icons">expand_less</i>
+            </button>
+            <button class='btn float--left' @click='scrollToBottom'>
+              <i class="material-icons">expand_more</i>
+            </button>
+            <button class='btn btn--danger float--left' @click='clearCompleted'><i class="material-icons">delete_sweep</i></button>
+          </div>
         </div>
       </div>
       <div class="todo-app__list">
         <todo-item v-for='todo in filterdTodos' :key='todo.id' :todo='todo' @update-todo='updateTodo' @delete-todo='deleteTodo' />
       </div>
-        <hr>
         <todo-creator class='todo-app__creator' @create-todo="createTodo"/>
     </div>
 </template>
@@ -27,6 +36,7 @@ import _assign from 'lodash/assign'
 import _findIndex from 'lodash/findIndex'
 import _forEachRight from 'lodash/forEachRight'
 import cryptoRandomString from 'crypto-random-string'
+import scrollTo from 'scroll-to'
 import TodoCreator from './TodoCreator'
 import TodoItem from './TodoItem'
 
@@ -157,19 +167,23 @@ export default {
       //     this.deleteTodo(this.todos[v])
       //   })
 
-      // lodash
-      // _forEachRight(this.todos, v => {
-      //   if (v.done) {
-      //     this.deleteTodo(v)
-      //   }
-      // })
-      this.todos = this.todos.filter(v => v.done === false)
+      _forEachRight(this.todos, v => {
+        if (v.done) {
+          this.deleteTodo(v)
+        }
+      })
+    },
+    scrollToTop () {
+      scrollTo(0, 0, {
+        ease: 'linear'
+      })
+    },
+    scrollToBottom () {
+      scrollTo(0, document.body.scrollHeight, { ease: 'linear' })
     }
   }
 }
 </script>
-<style lang="scss" scoped>
-button.active{
-  font-weight: bold;
-}
+<style lang="scss">
+  @import '../scss/style'
 </style>

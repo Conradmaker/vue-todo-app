@@ -1,6 +1,6 @@
 <template>
     <div>
-        <button @click='createTodo'>추가</button>
+        <button @click='createTodo'><i class="material-icons">add</i></button>
         <input :value='title' :placeholder="placeholder" type="text" @input='title = $event.target.value' @keypress.enter="createTodo"/>
     </div>
 </template>
@@ -23,6 +23,11 @@ export default {
       }
       this.$emit('create-todo', this.title)
       this.title = ''
+
+      this.$nextTick(() => {
+        window.scrollTo(0, document.body.scrollHeight) // body가 스크롤 할수 있는 최대높이
+        console.log(document.body.scrollHeight)
+      })
     }
   }
 }
