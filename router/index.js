@@ -21,12 +21,14 @@ const routes = [
   {
     name: "todos",
     path: "/todos",
+    redirect: "/todos/all", // todos로 접근하면 /todos/all로 보내버린다.
     component: TodoApp,
+    children: [{name: "todos-filter", path: ":id"}],
   },
 ];
 
 export default new VueRouter({
   // https://router.vuejs.org/kr/guide/essentials/history-mode.html
-  // mode: 'history',
+  // mode: "history",
   routes,
 });

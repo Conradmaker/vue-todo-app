@@ -2,9 +2,10 @@
     <div class='todo-app'>
       <div class="todo-app__actions">
         <div class="filters">
-          <button :class='{active:filter==="all"}' @click='changeFilter("all")'>모든 항목 ({{total}})</button>
-          <button :class='{active:filter==="active"}' @click='changeFilter("active")'>해야 할 항목 ({{activeCount}})</button>
-          <button :class='{active:filter==="completed"}' @click='changeFilter("completed")'>완료된 항목 ({{completedCount}})</button>
+          <!-- '/todos/'를 생략할수 있다. -->
+          <router-link to='/todos/all' tag='button' >모든 항목 ({{total}})</router-link>
+          <router-link to='/todos/active' tag='button' >해야 할 항목 ({{activeCount}})</router-link>
+          <router-link to='/todos/completed' tag='button' >완료된 항목 ({{completedCount}})</router-link>
         </div>
         <div class="actions clearfix">
           <div class="float--left">
@@ -48,13 +49,12 @@ export default {
   data () {
     return {
       db: null,
-      todos: [],
-      filter: 'all'
+      todos: []
     }
   },
   computed: {
     filterdTodos () {
-      switch (this.filter) {
+      switch (this.$route.params.id) {
         case 'all':
         default:
           return this.todos
@@ -140,9 +140,6 @@ export default {
       const foundIndex = _findIndex(this.todos, { id: todo.id })
       this.$delete(this.todos, foundIndex) // (1번인자의 2번인자인덱스값을 지운다.)
     },
-    changeFilter (filter) {
-      this.filter = filter
-    },
     completeAll (checked) {
       // DB갱신
       const newTodos = this.db
@@ -185,5 +182,9 @@ export default {
 }
 </script>
 <style lang="scss">
-  @import 'scss/style'
+  @import 'scss/style';
+
+  .filters button.router-link-active{
+    background:royalblue;
+  }
 </style>
