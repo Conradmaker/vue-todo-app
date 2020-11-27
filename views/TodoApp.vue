@@ -29,9 +29,6 @@
     </div>
 </template>
 <script>
-import _cloneDeep from 'lodash/cloneDeep'
-import _findIndex from 'lodash/findIndex'
-import _forEachRight from 'lodash/forEachRight'
 import scrollTo from 'scroll-to'
 import TodoCreator from '~/components/TodoCreator'
 import TodoItem from '~/components/TodoItem'
@@ -66,46 +63,6 @@ export default {
     this.initDB()
   },
   methods: {
-    deleteTodo (todo) {
-      this.db
-        .get('todos')
-        .remove({ id: todo.id })
-        .write()
-
-      // _remove(this.todos, { id: todo.id }) 실제로 지워지긴하지만 mutable해서 안된디ㅏ.
-      const foundIndex = _findIndex(this.todos, { id: todo.id })
-      this.$delete(this.todos, foundIndex) // (1번인자의 2번인자인덱스값을 지운다.)
-    },
-    completeAll (checked) {
-      // DB갱신
-      const newTodos = this.db
-        .get('todos')
-        .forEach(v => {
-          v.done = checked
-        })
-        .write()
-      // LOCAL갱신
-      this.todos = _cloneDeep(newTodos)
-    },
-    clearCompleted () {
-      // 네이티브 로직
-      // this.todos.reduce((list, todo, index) => {
-      //   if (todo.done) {
-      //     list.push(index)
-      //   }
-      //   return list
-      // }, [])
-      //   .reverse()
-      //   .forEach(v => {
-      //     this.deleteTodo(this.todos[v])
-      //   })
-
-      _forEachRight(this.todos, v => {
-        if (v.done) {
-          this.deleteTodo(v)
-        }
-      })
-    },
     scrollToTop () {
       scrollTo(0, 0, {
         ease: 'linear'
