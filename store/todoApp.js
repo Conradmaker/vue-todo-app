@@ -12,9 +12,21 @@ export default {
   namespaced: true,
   state: () => ({
     db: null,
-    todos: []
+    todos: [],
+    filter: 'all'
   }),
   getters: {
+    filterdTodos (state) {
+      switch (state.filter) {
+        case 'all':
+        default:
+          return state.todos
+        case 'active': // 해야할 항목
+          return state.todos.filter((v) => !v.done)
+        case 'completed': // 완료된 항목
+          return state.todos.filter((v) => v.done)
+      }
+    },
     total (state) {
       return state.todos.length
     },
@@ -62,6 +74,9 @@ export default {
     },
     updateTodo (state, { todo, key, value }) {
       todo[key] = value
+    },
+    updateFilter (state, filter) {
+      state.filter = filter
     }
   },
   actions: {
@@ -83,7 +98,7 @@ export default {
           .write() // db작성하는 lowdb메소드
       }
     },
-    createTodo (context, title) {
+    createTodo ({ commit }, title) {
       const newTodo = {
         id: cryptoRandomString({ length: 10 }), // 10개단어로 랜덤 단어 생성
         title,
@@ -93,9 +108,9 @@ export default {
       }
 
       // create DB
-      context.commmit('createDB', newTodo)
+      commit('createDB', newTodo)
       // create Client
-      context.commit('pushTodo', newTodo)
+      commit('pushTodo', newTodo)
     },
     updateTodo (context, { todo, value }) {
       context.commit('updateTodo', { todo, value })
@@ -123,7 +138,8 @@ export default {
         })
         .write()
       // LOCAL갱신
-      context.state.todos = _cloneDeep(newTodos)
+      // context.state.todos = _cloneDeep(newTodos);
+      context.commit('assignTodos', _cloneDeep(newTodos))
     },
     clearCompleted (context) {
       _forEachRight(context.state.todos, (todo) => {

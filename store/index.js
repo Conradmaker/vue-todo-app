@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import TodoApp from './todoApp'
+import todoApp from './todoApp'
 
 Vue.use(Vuex)
 
