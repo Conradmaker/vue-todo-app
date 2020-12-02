@@ -1,15 +1,15 @@
-import Vue from "vue";
-import Vuex from "vuex";
-import TodoApp from "to";
+import Vue from 'vue'
+import Vuex from 'vuex'
+import TodoApp from './todoApp'
 
-Vue.use(Vuex);
+Vue.use(Vuex)
 
 export default new Vuex.Store({
   // strict: true, // 배포가될때는 false 개발시에는 true
-  strict: process.env.NODE_ENV !== "production",
-  modules:{
-      todoApp
-  }
+  strict: process.env.NODE_ENV !== 'production',
+  modules: {
+    todoApp
+  },
   // Data
   state: {},
   // Computed
@@ -17,5 +17,5 @@ export default new Vuex.Store({
   // Methods 실제값을 변경할때 (비동기 X)
   mutations: {},
   // Methods 비동기를 포함하는 일반로직
-  actions: {},
-});
+  actions: {}
+})

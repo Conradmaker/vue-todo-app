@@ -1,10 +1,10 @@
-const path = require("path");
-const {VueLoaderPlugin} = require("vue-loader");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const CopyPlugin = require("copy-webpack-plugin");
-const {CleanWebpackPlugin} = require("clean-webpack-plugin");
-const {merge} = require("webpack-merge");
-require("@babel/polyfill");
+const path = require('path')
+const { VueLoaderPlugin } = require('vue-loader')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const { merge } = require('webpack-merge')
+require('@babel/polyfill')
 // module.exports = {
 //   //진입점 (가장먼저 실행될 파일)
 //   entry: {
@@ -57,66 +57,66 @@ module.exports = (env, opts) => {
   const config = {
     // 중복되는 옵션들..
     resolve: {
-      extensions: [".vue", ".js"], // 확장자 생략
+      extensions: ['.vue', '.js'], // 확장자 생략
       alias: {
-        "~": path.join(__dirname),
-        scss: path.join(__dirname, "./scss"),
-      },
+        '~': path.join(__dirname),
+        scss: path.join(__dirname, './scss')
+      }
     },
     entry: {
-      app: ["@babel/polyfill", path.join(__dirname, "main.js")],
+      app: ['@babel/polyfill', path.join(__dirname, 'main.js')]
     },
     output: {
-      filename: "[name].js",
-      path: path.join(__dirname, "dist"),
+      filename: '[name].js',
+      path: path.join(__dirname, 'dist')
     },
     module: {
       rules: [
         {
           test: /\.vue$/,
-          loader: "vue-loader",
+          loader: 'vue-loader'
         },
         {
           test: /\.js$/,
           exclude: /node_modules/,
-          loader: "babel-loader",
+          loader: 'babel-loader'
         },
         {
           test: /\.css$/,
-          use: ["vue-style-loader", "css-loader", "postcss-loader"],
+          use: ['vue-style-loader', 'css-loader', 'postcss-loader']
         },
         {
           test: /\.scss$/,
           use: [
-            "vue-style-loader",
-            "css-loader",
-            "postcss-loader",
-            "sass-loader",
-          ],
-        },
-      ],
+            'vue-style-loader',
+            'css-loader',
+            'postcss-loader',
+            'sass-loader'
+          ]
+        }
+      ]
     },
     plugins: [
       new VueLoaderPlugin(),
-      new HtmlWebpackPlugin({template: path.join(__dirname, "index.html")}),
-      new CopyPlugin([{from: "assets/", to: "."}]),
-    ],
-  };
+      new HtmlWebpackPlugin({ template: path.join(__dirname, 'index.html') }),
+      new CopyPlugin([{ from: 'assets/', to: '.' }])
+    ]
+  }
   // config와 아래 return값을 병합해서 내보내면 된다.
-  if (opts.mode === "development") {
+  if (opts.mode === 'development') {
     // 개발용
     return merge(config, {
-      devtool: "eval",
+      devtool: 'eval',
       devServer: {
         open: false,
-        hot: true,
-      },
-    });
+        hot: true
+      }
+    })
   } else {
     // 제품용
     return merge(config, {
-      devtool: "cheap-module-source-map",
-      plugins: [new CleanWebpackPlugin()],
-    });
+      devtool: 'cheap-module-source-map',
+      plugins: [new CleanWebpackPlugin()]
+    })
   }
-};
+}

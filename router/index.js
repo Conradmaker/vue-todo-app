@@ -1,34 +1,34 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
+import Vue from 'vue'
+import VueRouter from 'vue-router'
 
-import Home from "~/views/Home";
-import About from "~/views/About";
-import TodoApp from "~/views/TodoApp";
+import Home from '~/views/Home'
+import About from '~/views/About'
+import TodoApp from '~/views/TodoApp'
 
-Vue.use(VueRouter);
+Vue.use(VueRouter)
 
 const routes = [
   {
-    name: "index",
-    path: "/",
-    component: Home,
+    name: 'index',
+    path: '/',
+    component: Home
   },
   {
-    name: "about",
-    path: "/about",
-    component: About,
+    name: 'about',
+    path: '/about',
+    component: About
   },
   {
-    name: "todos",
-    path: "/todos",
-    redirect: "/todos/all", // todos로 접근하면 /todos/all로 보내버린다.
+    name: 'todos',
+    path: '/todos',
+    redirect: '/todos/all', // todos로 접근하면 /todos/all로 보내버린다.
     component: TodoApp,
-    children: [{name: "todos-filter", path: ":id"}],
-  },
-];
+    children: [{ name: 'todos-filter', path: ':id' }]
+  }
+]
 
 export default new VueRouter({
   // https://router.vuejs.org/kr/guide/essentials/history-mode.html
   // mode: "history",
-  routes,
-});
+  routes
+})
