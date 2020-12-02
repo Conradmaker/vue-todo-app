@@ -32,6 +32,7 @@
     </div>
 </template>
 <script>
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 import scrollTo from 'scroll-to'
 import TodoCreator from '~/components/TodoCreator'
 import TodoItem from '~/components/TodoItem'
@@ -42,6 +43,13 @@ export default {
     TodoItem
   },
   computed: {
+    // Helpers
+    ...mapState('todoApp', [
+      'todos'
+    ]),
+    ...mapGetters('todoApp', [
+      'total', 'activeCount', 'completedCount'
+    ]),
     filterdTodos () {
       switch (this.$route.params.id) {
         case 'all':
@@ -52,6 +60,12 @@ export default {
         case 'completed': // 완료된 항목
           return this.todos.filter(v => v.done)
       }
+    },
+    total () {
+      return this.$store.getters.todoApp.total
+    },
+    activeCount () {
+      return this.$store.getters.todoApp.activeCount
     },
     allDone: {
       get () {
@@ -66,6 +80,8 @@ export default {
     this.initDB()
   },
   methods: {
+    // ...mapMutations('todoApp', ['updateTodo']),
+    ...mapActions('todoApp', ['initDB', 'completeAll', 'clearCompleted']),
     scrollToTop () {
       scrollTo(0, 0, {
         ease: 'linear'
